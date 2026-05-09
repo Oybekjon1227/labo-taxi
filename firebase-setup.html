@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Firebase Sozlash — Labo Oltiariq</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#0f0f1a;color:#e8e8f0;min-height:100vh;padding:20px}
+.container{max-width:700px;margin:0 auto}
+h1{font-size:28px;font-weight:900;text-align:center;margin:20px 0 8px;color:#f5c518}
+.sub{text-align:center;color:#8b8ba3;margin-bottom:32px;font-size:14px}
+.step{background:#1a1a2e;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:24px;margin-bottom:16px;position:relative}
+.step-num{position:absolute;top:-12px;left:20px;background:linear-gradient(135deg,#f5c518,#c9a000);color:#111;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px}
+.step h3{font-size:16px;margin-bottom:12px;padding-left:16px}
+.step p{color:#9090b0;font-size:14px;line-height:1.7}
+.step a{color:#448aff;text-decoration:none;font-weight:700}
+.step a:hover{text-decoration:underline}
+.highlight{background:#16213e;border:1px solid rgba(245,197,24,0.2);border-radius:10px;padding:16px;margin:12px 0;font-family:'Courier New',monospace;font-size:13px;color:#f5c518;line-height:1.6;word-break:break-all}
+.config-area{width:100%;min-height:200px;background:#0f0f1a;border:2px solid rgba(245,197,24,0.3);border-radius:10px;padding:16px;color:#f5c518;font-family:'Courier New',monospace;font-size:13px;outline:none;resize:vertical}
+.config-area:focus{border-color:#f5c518;box-shadow:0 0 0 3px rgba(245,197,24,0.15)}
+.btn{display:block;width:100%;padding:16px;background:linear-gradient(135deg,#f5c518,#c9a000);color:#111;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:16px;font-weight:800;cursor:pointer;margin-top:12px;transition:0.2s}
+.btn:hover{transform:scale(0.98)}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.success{display:none;text-align:center;padding:32px;background:#1a2e1a;border:1px solid rgba(0,200,83,0.3);border-radius:16px;margin-top:20px}
+.success h2{color:#00c853;margin-bottom:8px}
+.warn{background:#2e2a1a;border:1px solid rgba(255,202,40,0.3);border-radius:10px;padding:14px;margin:12px 0;font-size:13px;color:#ffca28;line-height:1.6}
+ol{padding-left:20px;color:#9090b0;font-size:14px;line-height:2}
+ol li{margin-bottom:4px}
+img{max-width:100%;border-radius:10px;margin:10px 0;border:1px solid rgba(255,255,255,0.1)}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🔥 Firebase Sozlash</h1>
+<p class="sub">Quyidagi 3 ta qadamni bajaring — 2 daqiqa vaqt oladi</p>
+
+<div class="step">
+<div class="step-num">1</div>
+<h3>Firebase loyiha yarating</h3>
+<ol>
+<li>Bu havolani bosing: <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a></li>
+<li>Google hisobingiz bilan kiring</li>
+<li><strong>"Add project"</strong> (yoki "Loyiha qo'shish") tugmasini bosing</li>
+<li>Loyiha nomi: <strong>labo-taxi</strong> deb yozing → "Continue"</li>
+<li>Google Analytics: o'chirib qo'ying → <strong>"Create project"</strong></li>
+<li>Loyiha yaratilgandan keyin <strong>"Continue"</strong> bosing</li>
+</ol>
+</div>
+
+<div class="step">
+<div class="step-num">2</div>
+<h3>Firestore Database yarating</h3>
+<ol>
+<li>Chap menyudan <strong>"Build" → "Firestore Database"</strong> tanlang</li>
+<li><strong>"Create database"</strong> tugmasini bosing</li>
+<li><strong>"Start in test mode"</strong> ni tanlang → "Next"</li>
+<li>Region: eng yaqin regionni tanlang (masalan <strong>europe-west1</strong>) → <strong>"Enable"</strong></li>
+</ol>
+</div>
+
+<div class="step">
+<div class="step-num">3</div>
+<h3>Web App qo'shing va Config ni oling</h3>
+<ol>
+<li>Loyiha sahifasida tepadagi <strong>⚙️ (gear)</strong> → <strong>"Project settings"</strong></li>
+<li>Pastga aylantiring → <strong>"Your apps"</strong> → <strong>&lt;/&gt;</strong> (Web) ikonini bosing</li>
+<li>App nomi: <strong>labo-taxi</strong> → <strong>"Register app"</strong></li>
+<li>Ekranda paydo bo'ladigan <strong>firebaseConfig</strong> ni ko'chirib, pastdagi maydonga joylashtiring:</li>
+</ol>
+
+<div class="warn">⚠️ Quyidagi ko'rinishdagi kodni ko'chirib oling:<br><br>
+<code>const firebaseConfig = { apiKey: "...", authDomain: "...", ... };</code></div>
+
+<textarea class="config-area" id="config-input" placeholder='Firebase Console dan olingan config ni shu yerga joylang...
+
+Masalan:
+const firebaseConfig = {
+  apiKey: "AIzaSyAbCdEf...",
+  authDomain: "labo-taxi.firebaseapp.com",
+  projectId: "labo-taxi",
+  storageBucket: "labo-taxi.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc123"
+};'></textarea>
+
+<button class="btn" id="btn-save" onclick="saveConfig()">✅ Saqlash va firebase-config.js ni yangilash</button>
+</div>
+
+<div class="success" id="success-msg">
+<h2>✅ Firebase sozlandi!</h2>
+<p>Endi admin panelni oching va haydovchi qo'shing.<br>APK ni qayta build qilish kerak.</p>
+</div>
+</div>
+
+<script>
+function saveConfig() {
+    const raw = document.getElementById('config-input').value.trim();
+    if (!raw) { alert('Config kiriting!'); return; }
+
+    // Extract config object
+    let match = raw.match(/apiKey\s*:\s*["']([^"']+)["']/);
+    if (!match) { alert('Config formati noto\'g\'ri. Firebase Console dan to\'g\'ridan-to\'g\'ri nusxa oling.'); return; }
+
+    const keys = ['apiKey','authDomain','projectId','storageBucket','messagingSenderId','appId'];
+    const config = {};
+    for (const key of keys) {
+        const m = raw.match(new RegExp(key + '\\s*:\\s*["\']([^"\']+)["\']'));
+        if (m) config[key] = m[1];
+    }
+
+    if (!config.apiKey || !config.projectId) {
+        alert('apiKey yoki projectId topilmadi!');
+        return;
+    }
+
+    // Save to localStorage for the setup script to pick up
+    localStorage.setItem('firebase_config_raw', JSON.stringify(config));
+
+    document.getElementById('success-msg').style.display = 'block';
+    document.getElementById('btn-save').disabled = true;
+    document.getElementById('btn-save').textContent = '✅ Saqlandi!';
+
+    alert('Config saqlandi!\\n\\nEndi terminalda quyidagini ishga tushiring:\\n\\ncd C:\\\\Users\\\\Oybekjon\\\\Desktop\\\\TAXI\\n node setup-firebase.js');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "appId": "uz.labo.taxi",
+  "appName": "Labo Oltiariq",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#0f0f1a",
+      "androidSplashResourceName": "splash",
+      "showSpinner": false
+    }
+  },
+  "server": {
+    "cleartext": true
+  }
+}

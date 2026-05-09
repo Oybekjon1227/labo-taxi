@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Labo Oltiariq - Admin Panel">
+    <title>Admin Panel — Labo Oltiariq</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="login-screen" class="screen active">
+    <div class="login-card">
+        <div class="login-logo"><span class="material-icons-round">local_taxi</span></div>
+        <h1>Labo Oltiariq</h1>
+        <p class="login-subtitle">Admin Panel</p>
+        <div class="form-group">
+            <label>Foydalanuvchi nomi</label>
+            <div class="input-icon-wrap">
+                <span class="material-icons-round input-icon">person</span>
+                <input type="text" id="login-username" placeholder="admin" autocomplete="username">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Parol</label>
+            <div class="input-icon-wrap">
+                <span class="material-icons-round input-icon">lock</span>
+                <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+                <button class="btn-eye" id="btn-toggle-pw" type="button">
+                    <span class="material-icons-round" id="eye-icon">visibility</span>
+                </button>
+            </div>
+        </div>
+        <p class="login-error" id="login-error"></p>
+        <button class="btn btn-primary btn-login" id="btn-login">
+            <span class="material-icons-round">login</span> Kirish
+        </button>
+        <a href="index.html" class="back-link">
+            <span class="material-icons-round">arrow_back</span> Haydovchi ilovasiga qaytish
+        </a>
+    </div>
+</div>
+
+<!-- ===== ADMIN DASHBOARD ===== -->
+<div id="admin-screen" class="screen">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo"><span class="material-icons-round">local_taxi</span></div>
+            <div>
+                <div class="sidebar-title">Labo Oltiariq</div>
+                <div class="sidebar-role">Admin Panel</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="sidebar-item active" data-section="section-dashboard">
+                <span class="material-icons-round">dashboard</span><span>Dashboard</span>
+            </button>
+            <button class="sidebar-item" data-section="section-drivers">
+                <span class="material-icons-round">people</span><span>Haydovchilar</span>
+            </button>
+            <button class="sidebar-item" data-section="section-pricing">
+                <span class="material-icons-round">sell</span><span>Narxlar</span>
+            </button>
+            <button class="sidebar-item" data-section="section-trips">
+                <span class="material-icons-round">route</span><span>Safarlar</span>
+            </button>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="sidebar-link">
+                <span class="material-icons-round">smartphone</span><span>Ilova</span>
+            </a>
+            <button class="sidebar-link" id="btn-admin-logout">
+                <span class="material-icons-round">logout</span><span>Chiqish</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Mobile topbar -->
+    <div class="topbar">
+        <button class="btn-hamburger" id="btn-hamburger">
+            <span class="material-icons-round">menu</span>
+        </button>
+        <span class="topbar-title" id="topbar-title">Dashboard</span>
+        <div class="admin-badge"><span class="material-icons-round">admin_panel_settings</span></div>
+    </div>
+
+    <main class="admin-main">
+
+        <!-- ===== DASHBOARD ===== -->
+        <section class="admin-section active" id="section-dashboard">
+            <div class="section-header">
+                <h2>Dashboard</h2>
+                <p>Umumiy ko'rsatkichlar</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon green"><span class="material-icons-round">payments</span></div>
+                    <div class="stat-body">
+                        <span class="stat-value" id="dash-total-income">0</span>
+                        <span class="stat-label">Jami daromad (so'm)</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue"><span class="material-icons-round">people</span></div>
+                    <div class="stat-body">
+                        <span class="stat-value" id="dash-driver-count">0</span>
+                        <span class="stat-label">Faol haydovchilar</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow"><span class="material-icons-round">route</span></div>
+                    <div class="stat-body">
+                        <span class="stat-value" id="dash-total-trips">0</span>
+                        <span class="stat-label">Jami safarlar</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple"><span class="material-icons-round">today</span></div>
+                    <div class="stat-body">
+                        <span class="stat-value" id="dash-today-income">0</span>
+                        <span class="stat-label">Bugungi daromad</span>
+                    </div>
+                </div>
+            </div>
+            <div class="admin-card">
+                <h3 class="card-title"><span class="material-icons-round">sell</span> Joriy Tariflar</h3>
+                <div class="tarif-summary" id="tarif-summary-dash"></div>
+                <button class="btn btn-outline btn-sm" onclick="switchSection('section-pricing')">
+                    <span class="material-icons-round">edit</span> Tariflarni o'zgartirish
+                </button>
+            </div>
+            <div class="admin-card">
+                <h3 class="card-title"><span class="material-icons-round">people</span> Haydovchilar holati</h3>
+                <div id="dash-drivers-list"></div>
+                <button class="btn btn-outline btn-sm" onclick="switchSection('section-drivers')" style="margin-top:12px;">
+                    <span class="material-icons-round">manage_accounts</span> Haydovchilarni boshqarish
+                </button>
+            </div>
+        </section>
+
+        <!-- ===== HAYDOVCHILAR ===== -->
+        <section class="admin-section" id="section-drivers">
+            <div class="section-header">
+                <h2>Haydovchilar</h2>
+                <p>Haydovchilarni qo'shish va boshqarish</p>
+            </div>
+
+            <!-- Add driver -->
+            <div class="admin-card">
+                <h3 class="card-title"><span class="material-icons-round">person_add</span> Yangi haydovchi qo'shish</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><span class="material-icons-round">badge</span> Ism va familiya</label>
+                        <input type="text" id="new-driver-name" placeholder="Ism Familiya">
+                    </div>
+                    <div class="form-group">
+                        <label><span class="material-icons-round">directions_car</span> Mashina raqami</label>
+                        <input type="text" id="new-car-number" placeholder="01 A 123 AA">
+                    </div>
+                    <div class="form-group">
+                        <label><span class="material-icons-round">phone</span> Telefon raqami</label>
+                        <input type="tel" id="new-phone" placeholder="+998 90 123 45 67">
+                    </div>
+                    <div class="form-group">
+                        <label><span class="material-icons-round">alternate_email</span> Login (foydalanuvchi nomi)</label>
+                        <input type="text" id="new-username" placeholder="haydovchi1" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label><span class="material-icons-round">lock</span> Parol</label>
+                        <input type="text" id="new-password" placeholder="Parol kiriting" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label><span class="material-icons-round">notes</span> Izoh (ixtiyoriy)</label>
+                        <input type="text" id="new-note" placeholder="Qo'shimcha ma'lumot">
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-add-driver" id="btn-add-driver">
+                    <span class="material-icons-round">person_add</span> Haydovchi qo'shish
+                </button>
+            </div>
+
+            <!-- Drivers table -->
+            <div class="admin-card">
+                <h3 class="card-title"><span class="material-icons-round">list</span> Haydovchilar ro'yxati</h3>
+                <div class="drivers-table-wrap">
+                    <table class="trips-table" id="drivers-table">
+                        <thead>
+                            <tr>
+                                <th>Ism</th>
+                                <th>Mashina</th>
+                                <th>Telefon</th>
+                                <th>Login</th>
+                                <th>Holat</th>
+                                <th>Amallar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="drivers-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== NARXLAR ===== -->
+        <section class="admin-section" id="section-pricing">
+            <div class="section-header">
+                <h2>Narxlar</h2>
+                <p>Tarif sozlamalari — barcha haydovchilarga qo'llaniladi</p>
+            </div>
+            <div class="admin-card">
+                <h3 class="card-title"><span class="material-icons-round">sell</span> Asosiy Tariflar</h3>
+                <div class="form-group">
+                    <label><span class="material-icons-round">start</span> Minimal narx (so'm)</label>
+                    <p class="field-hint">Safar boshlanishidagi minimal summa</p>
+                    <div class="input-prefix-wrap">
+                        <span class="input-prefix">so'm</span>
+                        <input type="number" id="admin-min-price" placeholder="10000" min="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><span class="material-icons-round">straighten</span> Har bir km uchun (so'm)</label>
+                    <p class="field-hint">1 km bosib o'tilganda qo'shiladigan summa</p>
+                    <div class="input-prefix-wrap">
+                        <span class="input-prefix">so'm/km</span>
+                        <input type="number" id="admin-per-km" placeholder="3000" min="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><span class="material-icons-round">hourglass_top</span> Kutish daqiqasi uchun (so'm)</label>
+                    <p class="field-hint">Mijozni kutish vaqtida 1 daqiqaga qo'shiladigan summa</p>
+                    <div class="input-prefix-wrap">
+                        <span class="input-prefix">so'm/min</span>
+                        <input type="number" id="admin-per-min" placeholder="500" min="0">
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="btn-save-pricing">
+                    <span class="material-icons-round">save</span> Narxlarni Saqlash (Barcha haydovchilarga qo'llaniladi)
+                </button>
+            </div>
+
+            <div class="admin-card preview-card">
+                <h3 class="card-title"><span class="material-icons-round">calculate</span> Narx Simulyatsiyasi</h3>
+                <div class="sim-row">
+                    <label>Masofa (km)</label>
+                    <input type="number" id="sim-km" value="5" min="0" step="0.1">
+                </div>
+                <div class="sim-row">
+                    <label>Kutish (min)</label>
+                    <input type="number" id="sim-min" value="3" min="0">
+                </div>
+                <div class="sim-result">
+                    <span>Taxminiy narx:</span>
+                    <strong id="sim-price">— so'm</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SAFARLAR ===== -->
+        <section class="admin-section" id="section-trips">
+            <div class="section-header">
+                <h2>Safarlar Tarixi</h2>
+                <p>Barcha haydovchilarning safarlar ro'yxati</p>
+            </div>
+
+            <!-- Driver filter -->
+            <div class="admin-card" style="padding:16px 20px;">
+                <div class="trip-filters-row">
+                    <div class="form-group" style="margin:0;flex:1;">
+                        <label>Haydovchi bo'yicha filter</label>
+                        <select id="trip-driver-filter" class="filter-select">
+                            <option value="all">Barcha haydovchilar</option>
+                        </select>
+                    </div>
+                    <div class="filter-chips" style="align-self:flex-end;">
+                        <button class="chip active" data-filter="all">Barchasi</button>
+                        <button class="chip" data-filter="today">Bugun</button>
+                        <button class="chip" data-filter="week">Hafta</button>
+                        <button class="chip" data-filter="month">Oy</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-banner" id="trips-summary-banner"></div>
+
+            <div class="trips-table-wrap">
+                <table class="trips-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Haydovchi</th>
+                            <th>Sana</th>
+                            <th>Narx</th>
+                            <th>Masofa</th>
+                            <th>Kutish</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-trips-tbody"></tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- Sidebar overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<!-- Edit Driver Modal -->
+<div class="modal-overlay-admin" id="edit-driver-modal">
+    <div class="modal-admin-card">
+        <div class="modal-admin-header">
+            <h3><span class="material-icons-round">edit</span> Haydovchini tahrirlash</h3>
+            <button class="btn-modal-close" id="btn-close-edit-modal">
+                <span class="material-icons-round">close</span>
+            </button>
+        </div>
+        <div class="form-group">
+            <label>Ism va familiya</label>
+            <input type="text" id="edit-driver-name" placeholder="Ism Familiya">
+        </div>
+        <div class="form-group">
+            <label>Mashina raqami</label>
+            <input type="text" id="edit-car-number" placeholder="01 A 123 AA">
+        </div>
+        <div class="form-group">
+            <label>Telefon raqami</label>
+            <input type="tel" id="edit-phone" placeholder="+998 90 123 45 67">
+        </div>
+        <div class="form-group">
+            <label>Login</label>
+            <input type="text" id="edit-username" placeholder="login" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label>Yangi parol (bo'sh qoldirsangiz o'zgarmaydi)</label>
+            <input type="text" id="edit-password" placeholder="Yangi parol" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label>Izoh</label>
+            <input type="text" id="edit-note" placeholder="Qo'shimcha ma'lumot">
+        </div>
+        <input type="hidden" id="edit-driver-id">
+        <div class="modal-admin-actions">
+            <button class="btn btn-primary" id="btn-save-edit-driver">
+                <span class="material-icons-round">save</span> Saqlash
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Admin password change modal -->
+<div class="modal-overlay-admin" id="change-pw-modal">
+    <div class="modal-admin-card">
+        <div class="modal-admin-header">
+            <h3><span class="material-icons-round">lock_reset</span> Admin parolini o'zgartirish</h3>
+            <button class="btn-modal-close" id="btn-close-pw-modal">
+                <span class="material-icons-round">close</span>
+            </button>
+        </div>
+        <div class="form-group">
+            <label>Yangi parol</label>
+            <input type="password" id="admin-new-password" placeholder="Yangi parol">
+        </div>
+        <div class="form-group">
+            <label>Parolni tasdiqlash</label>
+            <input type="password" id="admin-confirm-password" placeholder="Parolni qayta kiriting">
+        </div>
+        <div class="modal-admin-actions">
+            <button class="btn btn-primary" id="btn-save-new-pw">
+                <span class="material-icons-round">lock_reset</span> O'zgartirish
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="admin-toast" id="admin-toast"></div>
+
+<!-- Firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+.gradle/
+build/
+android/app/build/
+android/.gradle/
+
+# Firebase
+firebase-debug.log
+.firebase/
+
+# Local env
+.env
+.DS_Store
+Thumbs.db
+y.txt
+
+# Capacior / Android artifacts
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+
+# Build output
+www/
+*.apk
