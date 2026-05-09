@@ -16,10 +16,14 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// APK ichida offline qo'llab-quvvatlash
-db.enablePersistence()
+// APK ichida offline qo'llab-quvvatlash (Capacitor uchun)
+db.enablePersistence({ synchronizeTabs: true })
     .catch(err => {
-        console.warn('Offline persistence xatoligi:', err);
+        if (err.code === 'failed-precondition') {
+            console.warn('Offline persistence: bir nechta tab ochiq');
+        } else if (err.code === 'unimplemented') {
+            console.warn('Offline persistence bu brauzerda ishlamaydi');
+        }
     });
 
 /**

@@ -52,13 +52,12 @@ function initLogin() {
 }
 
 async function attemptLogin() {
-    const usernameInput = $('drv-username').value.trim();
-    const username = usernameInput.toLowerCase(); // Kichik harflarga o'tkazamiz
+    const username = $('drv-username').value.trim();
     const password = $('drv-password').value;
     const errEl = $('drv-login-error');
     const btn = $('btn-drv-login');
 
-    if (!usernameInput || !password) {
+    if (!username || !password) {
         errEl.textContent = 'Login va parolni kiriting';
         return;
     }
@@ -68,50 +67,26 @@ async function attemptLogin() {
     errEl.textContent = '';
 
     try {
-        if (typeof db === 'undefined') {
-            throw new Error('Firebase ulanmadi (Internet yo\'q yoki CDN bloklangan).');
-        }
-
-        // Faqat username bo'yicha qidiramiz (composite index talab qilinmaydi)
         const snap = await db.collection('drivers')
             .where('username', '==', username)
+            .where('password', '==', password)
+            .where('active', '==', true)
             .get();
 
         if (snap.empty) {
-            errEl.textContent = '❌ Bunday login topilmadi';
+            errEl.textContent = '❌ Login yoki parol noto\'g\'ri';
             btn.disabled = false;
             btn.innerHTML = '<span class="material-icons-round">login</span> Kirish';
             return;
         }
 
         const doc = snap.docs[0];
-        const driverData = doc.data();
-
-        // Parolni tekshirish
-        if (driverData.password !== password) {
-            errEl.textContent = '❌ Parol noto\'g\'ri';
-            btn.disabled = false;
-            btn.innerHTML = '<span class="material-icons-round">login</span> Kirish';
-            return;
-        }
-
-        // Faol holatini tekshirish
-        if (!driverData.active) {
-            errEl.textContent = '🚫 Hisobingiz bloklangan. Admin bilan bog\'laning.';
-            btn.disabled = false;
-            btn.innerHTML = '<span class="material-icons-round">login</span> Kirish';
-            return;
-        }
-
-        state.currentDriver = { id: doc.id, ...driverData };
+        state.currentDriver = { id: doc.id, ...doc.data() };
         sessionStorage.setItem('driver_session', JSON.stringify(state.currentDriver));
         showMainApp();
 
     } catch (err) {
-        console.error('Login xatolik:', err);
-        // Telefon uchun xatoni ekranga aniq chiqarish
-        alert('XATOLIK: ' + err.message);
-        
+        console.error(err);
         // Offline fallback: check localStorage cache
         const cached = localStorage.getItem('driver_session_cache');
         if (cached) {
@@ -123,7 +98,7 @@ async function attemptLogin() {
                 return;
             }
         }
-        errEl.textContent = '⚠️ Xatolik: ' + (err.message || 'Internetni tekshiring');
+        errEl.textContent = '⚠️ Internet yo\'q. Admin panelga ulanib ko\'ring.';
         btn.disabled = false;
         btn.innerHTML = '<span class="material-icons-round">login</span> Kirish';
     }
@@ -180,6 +155,7 @@ function loadAllData() {
 function loadTrips() {
     db.collection('trips')
         .where('driverId', '==', state.currentDriver.id)
+        .orderBy('date', 'desc')
         .limit(200)
         .onSnapshot(snap => {
             state.trips = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -188,11 +164,6 @@ function loadTrips() {
                 ...t,
                 date: t.date?.toDate ? t.date.toDate().toISOString() : t.date
             }));
-            
-            // Mahalliy xotirada saralash (composite index talab qilinmasligi uchun)
-            state.trips.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            updateHistory();
         }, err => {
             console.warn('Trips load error:', err);
             // Use cached trips

@@ -173,8 +173,7 @@ $('btn-add-driver').addEventListener('click', async () => {
     const name     = $('new-driver-name').value.trim();
     const carNum   = $('new-car-number').value.trim();
     const phone    = $('new-phone').value.trim();
-    const rawUsername = $('new-username').value.trim();
-    const username = rawUsername.toLowerCase(); // Kichik harflar bilan saqlash
+    const username = $('new-username').value.trim();
     const password = $('new-password').value.trim();
     const note     = $('new-note').value.trim();
 
